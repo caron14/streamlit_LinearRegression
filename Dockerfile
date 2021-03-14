@@ -13,7 +13,7 @@ RUN pip install streamlit==0.78.0 \
 WORKDIR /work
 
 # 
-# docker run -it -p 8888:8888 -v ~/Desktop/code-practice/streamlit/code:/work <Image ID> bash
-# streamlit run main.py --server.port 8888
+# docker run -it -p 8888:8888 -v ~/git-portfolio/streamlit_LinearRegression:/work <Image ID> bash
+# streamlit run ***.py --server.port 8888
 # --> localhost:8888
 
