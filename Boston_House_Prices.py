@@ -63,7 +63,7 @@ FeaturesName = [\
               ]
 
 
-# データセットの相関を確認する
+# Check an exmple,  "Target" vs each variable
 if st.checkbox('Show the relation between "Target" vs each variable'):
 	checked_variable = st.selectbox(
 		'Select one variable:',
@@ -84,15 +84,10 @@ Features_chosen = []
 Features_NonUsed = st.multiselect(
 	'Select the variables NOT to be used', 
 	FeaturesName)
-# for name in FeaturesName:
-# 	if name in Features_NonUsed:
-# 		continue
-# 	else:
-# 		Features_chosen.append(name)
-# st.write(Features_chosen)
+
 df = df.drop(columns=Features_NonUsed)
 
-# Perform the logarithmic transformation?
+# Perform the logarithmic transformation
 left_column, right_column = st.beta_columns(2)
 bool_log = left_column.radio(
 			'Perform the logarithmic transformation?', 
@@ -105,13 +100,11 @@ if bool_log == 'Yes':
 					'Select the variables you perform the logarithmic transformation', 
 					df.columns
 					)
-	# st.write(Log_Features)
 	# Perform logarithmic transformation
 	df_log[Log_Features] = np.log(df_log[Log_Features])
-	# st.dataframe(df_log)
 
 
-# Perform the standardization?
+# Perform the standardization
 left_column, right_column = st.beta_columns(2)
 bool_std = left_column.radio(
 			'Perform the standardization?', 
@@ -130,12 +123,10 @@ if bool_std == 'Yes':
 			continue
 		else:
 			Std_Features_chosen.append(name)
-	# st.write(Std_Features_chosen)
 	# Perform standardization
 	sscaler = preprocessing.StandardScaler()
 	sscaler.fit(df_std[Std_Features_chosen])
 	df_std[Std_Features_chosen] = sscaler.transform(df_std[Std_Features_chosen])
-	# st.dataframe(df_std)
 
 """
 ### Split the dataset
@@ -152,11 +143,14 @@ random_seed = right_column.number_input('Set random seed (0-):',
 							  value=0, step=1,
 							  min_value=0)
 
-X_train, X_val, Y_train, Y_val = train_test_split(df_std.drop(columns=["PRICES"]), 
-													df_std['PRICES'], 
-													test_size=test_size, 
-													random_state=random_seed)
+X_train, X_val, Y_train, Y_val = train_test_split(
+	df_std.drop(columns=["PRICES"]), 
+	df_std['PRICES'], 
+	test_size=test_size, 
+	random_state=random_seed
+	)
 
+# Create a regression-model instance
 regressor = LinearRegression()
 regressor.fit(X_train, Y_train)
 
@@ -165,10 +159,8 @@ Y_pred_val = regressor.predict(X_val)
 
 # Inverse logarithmic transformation if necessary
 if "PRICES" in Log_Features:
-	Y_pred_train = np.exp(Y_pred_train)
-	Y_pred_val = np.exp(Y_pred_val)
-	Y_train = np.exp(Y_train)
-	Y_val = np.exp(Y_val)
+	Y_pred_train, Y_pred_val = np.exp(Y_pred_train), np.exp(Y_pred_val)
+	Y_train, Y_val = np.exp(Y_train), np.exp(Y_val)
 
 """
 ## Show the result
@@ -189,7 +181,6 @@ show_val = right_column.radio(
 				('Yes','No')
 				)
 
-# Plot the result
 # default axis range
 y_max_train = max([max(Y_train), max(Y_pred_train)])
 y_max_val = max([max(Y_val), max(Y_pred_val)])
@@ -218,14 +209,5 @@ plt.tick_params(labelsize=6)
 st.pyplot(fig)
 
 
-
-
-left_column, right_column = st.beta_columns(2)
-pressed = left_column.button('Press me?')
-if pressed:
-    right_column.write("Woohoo!")
-
-expander = st.beta_expander("FAQ")
-expander.write("Here you could put in some really, really long explanations...")
 
 
