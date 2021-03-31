@@ -3,13 +3,13 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+sns.set()
 from sklearn.datasets import load_boston
 from sklearn import preprocessing
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import r2_score
 
-sns.set()
 
 # title
 st.title('Linear regression on Boston house prices')
@@ -17,19 +17,13 @@ st.title('Linear regression on Boston house prices')
 # Read the dataset
 dataset = load_boston()
 df = pd.DataFrame(dataset.data)
+# Assign the columns into df
 df.columns = dataset.feature_names
+# Assign the target variable(house prices)
 df["PRICES"] = dataset.target
+
 # Show the table data
 if st.checkbox('Show the dataset as table data'):
-	"""
-	```python
-	dataset = load_boston()
-	df = pd.DataFrame(dataset.data)
-	df.columns = dataset.feature_names
-	df["PRICES"] = dataset.target
-	st.dataframe(df)
-	```
-	"""
 	st.dataframe(df)
 
 # Explanatory variable
