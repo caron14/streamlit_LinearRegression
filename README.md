@@ -31,7 +31,7 @@ You can get started in the web app in this repository by the following procedure
     docker run -it -p 8888:8888 -v ~/(local dir)/:/work (IMAGE ID) bash
     ```
 
-    Note that "-p 8888: 8888" is an instruction to connect the host(your local PC) with the docker container. The first and second 8888 indicate the host’s and the container's port numbers, respecticely.
+    Note that "-p 8888: 8888" is an instruction to connect the host(your local PC) with the docker container. The first and second 8888 indicate the host’s and the container's port numbers, respectively.
 
 3.  Turn a python script into a web app by Streamlit
 
